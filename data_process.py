@@ -8,8 +8,8 @@ import pandas as pd
 
 
 
-def process_wiki_clean():
-    with open('../data/wikipedia-cn-20230720-filtered.json','r',encoding='utf-8') as f:
+def process_wiki_clean(data_path):
+    with open(data_path,'r',encoding='utf-8') as f:
         data=json.load(f)
     doc_ids=[]
     for line in tqdm(data):
@@ -218,8 +218,11 @@ def process_baidu():
     
 if __name__=="__main__":
     tokenizer=ChatGLMTokenizer(vocab_file='./chatglm_tokenizer/tokenizer.model')
-    print(test_tokenizer('你好么'))
-    # process_wiki_clean()
+    # print(test_tokenizer('你好么'))
+    wiki_data = '../dataset/wikipedia-cn-20230720-filtered.json'
+    medical_data = '../dataset/medical_pretrain.json'
+    process_wiki_clean(wiki_data)
+    process_medical(medical_data,'qa')
     # process_medical('./data/medical_book_zh.json','book')
     # process_medical('./data/train_encyclopedia.json','encyclopedia')
     # sft_to_pretrain()
