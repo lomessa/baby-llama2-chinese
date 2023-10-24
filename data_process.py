@@ -5,8 +5,11 @@ from tqdm import tqdm
 from chatglm_tokenizer.tokenization_chatglm import ChatGLMTokenizer
 import pandas as pd
 #from zhconv import convert
+
+
+
 def process_wiki_clean():
-    with open('./data/wikipedia-cn-20230720-filtered.json','r',encoding='utf-8') as f:
+    with open('../data/wikipedia-cn-20230720-filtered.json','r',encoding='utf-8') as f:
         data=json.load(f)
     doc_ids=[]
     for line in tqdm(data):
@@ -36,6 +39,13 @@ def process_medical(data_path,name):
     with open('./data/medical_{}.bin'.format(name),'wb') as f:
         f.write(arr.tobytes()) 
 
+def test_tokenizer(txt):
+    text_id = tokenizer.encode(txt,add_special_token=False)
+    text_id.append(tokenizer.special_tokens['<eos>'])
+    print(text_id)
+    print(tokenizer.decode(text_id))
+    
+    
 def sft_to_pretrain():
     doc_ids=[]
 
@@ -137,14 +147,6 @@ def sft_process():
             continue
         q_lst.append(q)
         a_lst.append(a)
-    #
-    # with open('../track1/train_valid.json','r') as f:
-    #     data=json.load(f)
-    # #
-    # for l in data:
-    #     q_lst.append(l['question'])
-    #     a_lst.append(l['answer'])
-    #
     f = open('./data/Belle_open_source_1M.json','r',encoding='utf-8')
     
     #s
@@ -216,29 +218,30 @@ def process_baidu():
     
 if __name__=="__main__":
     tokenizer=ChatGLMTokenizer(vocab_file='./chatglm_tokenizer/tokenizer.model')
+    print(test_tokenizer('你好么'))
     # process_wiki_clean()
     # process_medical('./data/medical_book_zh.json','book')
     # process_medical('./data/train_encyclopedia.json','encyclopedia')
     # sft_to_pretrain()
     # sft_process()
     #process_baidu()
-    data_path_list=[
-        './data/baidubaike_563w_1.bin',
-        './data/baidubaike_563w_2.bin',
-        './data/baidubaike_563w_3.bin',
-        './data/baidubaike_563w_4.bin',
-        './data/baidubaike_563w_5.bin',
-        './data/medical_book.bin',
-        './data/medical_encyclopedia.bin',
-        './data/wiki.bin',
-        './data/medical_qa.bin'
-    ]
-    data_lst=[]
-    for data_path in data_path_list:
-        with open(data_path,'rb') as f:
-            data=np.fromfile(f,dtype=np.uint16)
-            data_lst.append(data)
-    arr = np.concatenate(data_lst)
-    print(arr.shape)
-    with open('./data/pretrain_data.bin','wb') as f:
-        f.write(arr.tobytes())
+    # data_path_list=[
+    #     './data/baidubaike_563w_1.bin',
+    #     './data/baidubaike_563w_2.bin',
+    #     './data/baidubaike_563w_3.bin',
+    #     './data/baidubaike_563w_4.bin',
+    #     './data/baidubaike_563w_5.bin',
+    #     './data/medical_book.bin',
+    #     './data/medical_encyclopedia.bin',
+    #     './data/wiki.bin',
+    #     './data/medical_qa.bin'
+    # ]
+    # data_lst=[]
+    # for data_path in data_path_list:
+    #     with open(data_path,'rb') as f:
+    #         data=np.fromfile(f,dtype=np.uint16)
+    #         data_lst.append(data)
+    # arr = np.concatenate(data_lst)
+    # print(arr.shape)
+    # with open('./data/pretrain_data.bin','wb') as f:
+    #     f.write(arr.tobytes())
