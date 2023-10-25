@@ -258,8 +258,8 @@ if __name__=="__main__":
     #
     #-----init dataloader------
     data_path_list=[
-        'medical_qa.bin'
-        ,'wiki.bin'
+        './data/medical_qa.bin'
+        ,'./data/wiki.bin'
         #'./data/baidubaike_563w.bin',
         #'./data/medical_book.bin',
         # './data/medical_encyclopedia.bin',
