@@ -267,7 +267,7 @@ if __name__=="__main__":
         # './data/wiki.bin'
     ]
     train_ds = PretrainDataset(data_path_list, max_length=max_seq_len,memmap=True)
-    train_sampler = torch.utils.data.distributed.DistributedSampler(train_ds)
+    # train_sampler = torch.utils.data.distributed.DistributedSampler(train_ds) 单卡训练需要注释
     train_loader = torch.utils.data.DataLoader(
         train_ds,
         batch_size=batch_size,
@@ -275,7 +275,7 @@ if __name__=="__main__":
         drop_last=False,
         shuffle=False,        
         num_workers=0 if os.name == 'nt' else 4,
-        sampler=train_sampler
+        sampler= None  # train_sampler
     )
     # val_ds = PretrainDataset(data_path_list, max_length=256)
     # val_loader = torch.utils.data.DataLoader(
